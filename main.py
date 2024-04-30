@@ -32,9 +32,9 @@ def fast_MED(S, T, MED={}):
   elif S[0] == T[0]:
     result = fast_MED(S[1:], T[1:], MED)
   else:
-    cost_insert = fast_MED(S, T[1:], MED)
-    cost_delete = fast_MED(S[1:], T, MED)
-    result = 1 + min(cost_insert, cost_delete)
+    insertcost = fast_MED(S, T[1:], MED)
+    deletecost = fast_MED(S[1:], T, MED)
+    result = 1 + min(insertcost, deletecost)
     MED[(S, T)] = result
   return result
 
