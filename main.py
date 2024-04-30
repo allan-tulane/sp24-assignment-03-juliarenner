@@ -42,22 +42,26 @@ def fast_MED(S, T, MED={}):
 def fast_align_MED(S, T, MED={}):
   if (S, T) in MED:
     return MED[(S, T)]
-  if S == "":
+  elif S == "":
     MED[(S, T)] = ("-" * len(T), T)
     return MED[(S, T)]
-  if T == "":
+  elif T == "":
     MED[(S, T)] = (S, "-" * len(S))
     return MED[(S, T)]
-  if S[0] == T[0]:
-    S_aligned, T_aligned = fast_align_MED(S[1:], T[1:], MED)
-    MED[(S, T)] = (S[0] + S_aligned, T[0] + T_aligned)
   else:
-    S_insert, T_insert = fast_align_MED(S, T[1:], MED)
-    S_delete, T_delete = fast_align_MED(S[1:], T, MED)
-    insertcost = 1 + len(S_insert)
-    deletecost = 1 + len(S_delete)
-    if insertcost <= deletecost:
-      MED[(S, T)] = ("-" + S_insert, T[0] + T_insert)
+    if S[0] == T[0]:
+      S_aligned, T_aligned = fast_align_MED(S[1:], T[1:], MED)
+      MED[(S, T)] = (S[0] + S_aligned, T[0] + T_aligned)
     else:
-      MED[(S, T)] = (S[0] + S_delete, "-" + T_delete)
+      S_insert, T_insert = fast_align_MED(S, T[1:], MED)
+      S_delete, T_delete = fast_align_MED(S[1:], T, MED)
+
+      insertcost = 1 + len(S_insert)
+      deletecost = 1 + len(S_delete)
+
+      if insertcost <= deletecost:
+        MED[(S, T)] = ("-" + S_insert, T[0] + T_insert)
+      else:
+        MED[(S, T)] = (S[0] + S_delete, "-" + T_delete)
+
   return MED[(S, T)]
